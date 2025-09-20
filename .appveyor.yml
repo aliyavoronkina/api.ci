@@ -1,22 +1,16 @@
-image: Ubuntu2004  # Используем последний стабильный образ Ubuntu
-stack: jdk 11      # Указываем версию Java JDK
+image: Ubuntu2004
+stack: jdk 11
 
-# Настраиваем отслеживание веток
 branches:
   only:
+    - master
 
-    # - main
+build: off
 
-build: off         # Отключаем стандартную сборку MSBuild для .NET, она нам не нужна
-
-# Скрипт установки (запускается до сборки)
 install:
-  # Запускаем тестируемое приложение в фоновом режиме (символ & в конце)
   - java -jar ./artifacts/app-mbank.jar &
-  # Даем права на выполнение скрипта gradlew (на всякий случай)
-  - chmod +x ./gradlew
+  - chmod +x gradlew
+  - sleep 10  # Важно: добавляем задержку для запуска сервиса
 
-# Скрипт сборки
 build_script:
-  # Запускаем наши автотесты с подробным выводом (флаг --info)
   - ./gradlew test --info
