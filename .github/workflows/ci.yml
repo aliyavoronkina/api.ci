@@ -34,9 +34,7 @@ jobs:
 
       - name: Run tests with Gradle
         run: |
-          gradle test --no-daemon --console=plain \
-            --build-cache \
-            --parallel
+          gradle test --no-daemon --console=plain
 
       - name: Upload test reports
         uses: actions/upload-artifact@v4
