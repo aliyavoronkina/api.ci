@@ -1,17 +1,8 @@
-
-image: Ubuntu2004
+image: Ubuntu2204
 stack: jdk 11
 
-branches:
-  only:
-    - master
-
-build: off
-
-install:
-  - java -jar ./artifacts/app-mbank.jar &
-  - chmod +x gradlew
-  - sleep 10
-
 build_script:
-  - ./gradlew test --info
+  - chmod +x gradlew
+
+test_script:
+  - ./gradlew test
