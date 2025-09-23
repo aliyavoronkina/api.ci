@@ -14,18 +14,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-        cache: 'gradle'
     
     - name: Make gradlew executable
       run: chmod +x gradlew
     
-    - name: Build application
-      run: ./gradlew bootJar
-    
-    - name: Start server and run tests
-      run: |
-        java -jar build/libs/app-mbank.jar &
-        SERVER_PID=$!
-        sleep 30
-        ./gradlew test
-        kill $SERVER_PID
+    - name: Run tests
+      run: ./gradlew test
