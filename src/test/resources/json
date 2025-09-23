@@ -21,14 +21,14 @@
       },
       "number": {
         "type": "string",
-        "pattern": "^•• \\d{4}$"
+        "pattern": "^[A-Z]{2} \\d{4}$"
       },
       "balance": {
         "type": "integer"
       },
       "currency": {
         "type": "string",
-        "enum": ["RUB", "USD"]  // ДОБАВЛЕНО: проверка конкретных значений
+        "enum": ["RUB", "USD"]
       }
     }
   }
