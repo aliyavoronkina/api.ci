@@ -1,20 +1,15 @@
-image: Ubuntu2004  # Используем Ubuntu
-stack: jdk 11      # Java 11
+image: Ubuntu2004
+stack: jdk 11
 
 branches:
   only:
-    - main        # Ваша ветка называется main
+    - main
 
-build: off        # Отключаем стандартную сборку AppVeyor
+build: off
 
 install:
-  # Даем права на выполнение gradlew
   - chmod +x gradlew
 
 build_script:
-  # 1. Запускаем SUT (System Under Test) в фоновом режиме
-  - java -jar ./artifacts/app-mbank.jar &
-  # 2. Ждем 10 секунд чтобы сервис успел запуститься
-  - sleep 10
-  # 3. Запускаем автотесты с подробным выводом
+  # Запускаем только тесты без SUT
   - ./gradlew test --info
