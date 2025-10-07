@@ -9,19 +9,15 @@ build: off
 
 install:
   - chmod +x gradlew
-  # Обновляем зависимости перед запуском
-  - ./gradlew dependencies --refresh-dependencies
 
 build_script:
-  # 1. Запускаем SUT с выводом логов
+  # Останавливаем любой процесс на порту 9999 (для CI)
+  - pkill -f "java.*app-mbank" || true
+  # Запускаем SUT
   - java -jar ./artifacts/app-mbank.jar &
-
-  # 2. Ждем достаточно времени для запуска
-  - echo "Waiting for service to start..."
-  - sleep 25
-
-  # 3. Проверяем что сервис запустился
-  - curl -f http://localhost:9999/api/accounts || echo "Service check completed"
-
-  # 4. Запускаем тесты с детальным выводом
-  - ./gradlew clean test --info --no-daemon
+  # Ждем
+  - sleep 15
+  # Проверяем доступность
+  - curl -f http://localhost:9999/ || echo "Service check"
+  # Запускаем тесты
+  - ./gradlew clean test --info
