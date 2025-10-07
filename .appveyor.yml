@@ -8,15 +8,20 @@ branches:
 build: off
 
 install:
-  # Даем права на выполнение gradlew (как в подсказке)
   - chmod +x gradlew
+  # Обновляем зависимости перед запуском
+  - ./gradlew dependencies --refresh-dependencies
 
 build_script:
-  # 1. Запускаем SUT в фоновом режиме (&)
+  # 1. Запускаем SUT с выводом логов
   - java -jar ./artifacts/app-mbank.jar &
-  # 2. Ждем чтобы сервис успел запуститься
-  - sleep 20
-  # 3. Проверяем что сервис запустился (должен показать процесс на порту 9999)
-  - netstat -tulpn | grep 9999 || echo "Service check - port 9999"
-  # 4. Запускаем тесты БЕЗ ignoreFailures - чтобы сборка ПАДАЛА при неудачных тестах
-  - ./gradlew test --info
+
+  # 2. Ждем достаточно времени для запуска
+  - echo "Waiting for service to start..."
+  - sleep 25
+
+  # 3. Проверяем что сервис запустился
+  - curl -f http://localhost:9999/api/accounts || echo "Service check completed"
+
+  # 4. Запускаем тесты с детальным выводом
+  - ./gradlew clean test --info --no-daemon
