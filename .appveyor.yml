@@ -1,4 +1,5 @@
 image: Ubuntu2004
+
 stack: jdk 11
 
 branches:
@@ -9,19 +10,9 @@ build: off
 
 install:
   - chmod +x gradlew
+  - ./gradlew clean compileTestJava --refresh-dependencies
 
 build_script:
-  # Запускаем SUT
   - java -jar ./artifacts/app-mbank.jar &
-  - sleep 15
-
-  # Пробуем разные endpoints
-  - echo "Testing endpoints:"
-  - curl -f http://localhost:9999/ || echo "Endpoint / - 404"
-  - curl -f http://localhost:9999/api/accounts || echo "Endpoint /api/accounts - 404"
-  - curl -f http://localhost:9999/accounts || echo "Endpoint /accounts - 404"
-  - curl -f http://localhost:9999/bank/accounts || echo "Endpoint /bank/accounts - 404"
-  - curl -f http://localhost:9999/api/cards || echo "Endpoint /api/cards - 404"
-
-  # Запускаем тесты
-  - ./gradlew clean test --info --refresh-dependencies
+  - sleep 30
+  - ./gradlew test --info

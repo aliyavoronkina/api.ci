@@ -11,16 +11,18 @@ compileTestJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
-    // Добавляем резервный репозиторий
-    maven { url 'https://repo.maven.apache.org/maven2' }
 }
 
 dependencies {
     testImplementation 'io.rest-assured:rest-assured:5.5.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testImplementation 'io.rest-assured:json-schema-validator:5.5.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
 }
