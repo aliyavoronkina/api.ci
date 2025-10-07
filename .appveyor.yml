@@ -11,5 +11,11 @@ install:
   - chmod +x gradlew
 
 build_script:
-  # Запускаем только тесты без SUT
+  # 1. Запускаем SUT в фоновом режиме
+  - java -jar ./artifacts/app-mbank.jar &
+  # 2. Ждем чтобы сервис успел запуститься
+  - sleep 20
+  # 3. Проверяем что сервис запустился
+  - netstat -tulpn | grep 9999 || echo "Service not started on port 9999"
+  # 4. Запускаем тесты
   - ./gradlew test --info
