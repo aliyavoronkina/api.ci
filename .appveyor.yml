@@ -1,5 +1,4 @@
 image: Ubuntu2004
-
 stack: jdk 11
 
 branches:
@@ -10,9 +9,9 @@ build: off
 
 install:
   - chmod +x gradlew
-  - ./gradlew clean compileTestJava --refresh-dependencies
+  - ./gradlew clean compileTestJava --refresh-dependencies --stacktrace
 
 build_script:
   - java -jar ./artifacts/app-mbank.jar &
-  - sleep 30
-  - ./gradlew test --info
+  - sleep 45
+  - ./gradlew test --info --stacktrace
