@@ -1,25 +1,25 @@
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeAll;
+package ru.netology.rest;
+
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.oneOf;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-class BankApiTest {
-
-    @BeforeAll
-    static void setUp() {
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 9999;
-    }
-
+class MobileBankApiTestV4 {
     @Test
-    void serverShouldBeRunning() {
-        // Простой тест что сервер отвечает (любой статус кроме таймаута)
+    void shouldReturnDemoAccounts() {
+        // Given - When - Then
+        // Предусловия
         given()
+                .baseUri("http://localhost:9999/api/v1")
+                // Выполняемые действия
                 .when()
-                .get("/api/accounts")
+                .get("/demo/accounts")
+                // Проверки
                 .then()
-                .statusCode(oneOf(200, 404, 405));
+                // Включаем логирование ответа
+                .log().all()
+                .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("accounts.schema.json"));
     }
 }

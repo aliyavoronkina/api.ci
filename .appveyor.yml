@@ -8,29 +8,8 @@ branches:
 build: off
 
 install:
+  - java -jar ./artifacts/app-mbank.jar &
   - chmod +x gradlew
-  - ./gradlew clean compileTestJava --refresh-dependencies
 
 build_script:
-  - |
-    echo "=== Starting Application ==="
-    java -jar ./artifacts/app-mbank.jar &
-    APP_PID=$!
-    
-    echo "=== Waiting for startup ==="
-    sleep 45
-    
-    echo "=== Discovering actual endpoints ==="
-    # Проверим разные возможные пути
-    endpoints=("/api/accounts" "/accounts" "/bank/accounts" "/api/cards" "/cards" "/api/v1/accounts" "/bank/api/accounts")
-    
-    for endpoint in "${endpoints[@]}"; do
-      echo -n "Testing $endpoint ... "
-      status_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:9999$endpoint" || echo "FAILED")
-      echo "$status_code"
-    done
-    
-    echo "=== Running tests ==="
-    ./gradlew test --info
-    
-    kill $APP_PID
+  - ./gradlew test --info
